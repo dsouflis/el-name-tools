@@ -17,24 +17,111 @@ El-name-tools is a package assembling a set of tools to work with Greek names.
 ```ecmascript 6
 let nametools = require('el-name-tools');
 ```
-### Initializing without calculating namedays
+### Initializing without computing namedays
 The `#init` function loads the name dictionary and the yeardata
+```ecmascript 6
+nametools.init().then((result) => {
+  if(!result) {
+    console.log('Initialization failed')
+  } else {
+    //Use it
+  }
+});
+```
+or, inside an `async` context:
 ```ecmascript 6
 let result = await nametools.init();
 if( !result ) {
   console.log('Initialization failed!')
 }
+//Use it
 ```
 
-### Initializing while calculating namedays
+### Initializing while computing namedays
 The `#init` function with arguments (``start-year``, ``end-year-inclusive``) calculates
 namedays for the year range specified. Omitting the second argument defaults to a range of one year. 
+```ecmascript 6
+nametools.init(2020,2021).then((result) => {
+  if(!result) {
+    console.log('Initialization failed')
+  } else {
+    //Use it
+  }
+});
+```
+or, inside an `async` context:
 ```ecmascript 6
 let result = await nametools.init(2020,2021);
 if( !result ) {
   console.log('Initialization failed!')
 }
+//Use it
 ```
+
+### Recognizing a name
+This function identifies the name in the name dictionary and returns
+its stored data and its computed namedays for all years specified 
+during initialization.
+```ecmascript 6
+let name = nametools.recognizeName('Πάνος');
+/* Results in:
+{ name: 'Πάνος',
+  skeleton: 'πανοσ',
+  allnames:
+   [ 'Παναγιώτης', 'Πάνος', 'Πανίκος', 'Γιώτης', 'Τάκης', 'Πανούσος' ],
+  namedays:
+   [ { case: 'fixed', date: '1970-08-15' },
+     { case: 'fixed', date: '1970-12-26' },
+     { case: 'fixed', date: '1970-04-21' } ],
+  namedayDates: //For all initialized dates
+   { '2020':
+      [ 2020-08-15T00:00:00.000Z,
+        2020-12-26T00:00:00.000Z,
+        2020-04-21T00:00:00.000Z ] },
+  gender: 'MALE' }
+*/ 
+``` 
+`.allnames[0]` is the Canonical given name for this entry.
+
+### Recognizing and computing the vocative
+This function identifies the name in the name dictionary and computes
+the vocative of its recognized form, 
+or else computes the gender based on its form.
+```ecmascript 6
+let name = nametools.recognizeAndGetVocative('Πανήκος');
+// Results in 'Πανίκο'
+```
+
+### Recognizing and computing the normalized vocative
+This function identifies the name in the name dictionary and computes
+the vocative of its normalized form, 
+or else computes the gender based on its form.
+```ecmascript 6
+let name = nametools.recognizeAndGetVocative('Πανήκος');
+// Results in 'Παναγιώτη'
+```
+
+### Recognizing and computing the gender
+This function identifies the name in the name dictionary and returns its gender, 
+or else computes the gender based on its form.
+```ecmascript 6
+let name = nametools.recognizeAndGetGender('Πανήκος');
+// Results in 'MALE'
+```
+
+### Computing the vocative using the form of the name
+This function does not need any data, so it does not need prior initialization.
+```ecmascript 6
+let gender = nametools.getVocative('Πανήκος');
+// Results in 'Πανήκο'
+``` 
+
+### Computing the gender using the form of the name
+This function does not need any data, so it does not need prior initialization.
+```ecmascript 6
+let gender = nametools.getGender('Μπούλα');
+// Results in 'FEMALE'
+``` 
 
 ### Phonetic Skeleton
 The phonetic skeleton is the phonetic rendering of its argument, which must be a Greek word.
