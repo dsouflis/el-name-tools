@@ -5,10 +5,13 @@ All notable changes to this project will be documented in this file. See [standa
 Changelog
 =========
 
+## v1.0.2
+
+- Enhance: fixed License, added repository
+
 ## v1.0.1
 
 - Enhance: completed README, added CHANGELOG
-
 
 ## v1.0.0
 
