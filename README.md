@@ -18,7 +18,7 @@ El-name-tools is a package assembling a set of tools to work with Greek names.
 let nametools = require('el-name-tools');
 ```
 ### Initializing without computing namedays
-The `#init` function loads the name dictionary and the yeardata
+The `#init` function loads the name dictionary
 ```ecmascript 6
 nametools.init().then((result) => {
   if(!result) {
@@ -86,7 +86,7 @@ let name = nametools.recognizeName('Πάνος');
 ### Recognizing and computing the vocative
 This function identifies the name in the name dictionary and computes
 the vocative of its recognized form, 
-or else computes the gender based on its form.
+or else computes the vocative based on its form.
 ```ecmascript 6
 let name = nametools.recognizeAndGetVocative('Πανήκος');
 // Results in 'Πανίκο'
@@ -95,9 +95,9 @@ let name = nametools.recognizeAndGetVocative('Πανήκος');
 ### Recognizing and computing the normalized vocative
 This function identifies the name in the name dictionary and computes
 the vocative of its normalized form, 
-or else computes the gender based on its form.
+or else computes the vocative based on its form.
 ```ecmascript 6
-let name = nametools.recognizeAndGetVocative('Πανήκος');
+let name = nametools.recognizeAndGetNormalizedVocative('Πανήκος');
 // Results in 'Παναγιώτη'
 ```
 

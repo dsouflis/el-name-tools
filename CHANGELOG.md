@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file. See [standa
 Changelog
 =========
 
+## v1.1.2
+
+- Enhance: fixed typos in README
+
+## v1.1.1
+
+- Enhance: fixed README for recognizeAndGetNormalizedVocative
+
+## v1.1.0
+
+- Fix: proper reading of local init data
+
 ## v1.0.2
 
 - Enhance: fixed License, added repository

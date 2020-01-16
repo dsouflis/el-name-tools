@@ -1,10 +1,11 @@
 const fs = require('fs').promises;
+let path = require('path');
 
 var yearlyData = [];
 
 let readYearlyData = async () => {
   try {
-    let data = await fs.readFile('yearlyData.json');
+    let data = await fs.readFile(path.resolve(__dirname, 'yearlyData.json'));
     try {
       const dataJson = JSON.parse(data);
       console.log(
@@ -24,7 +25,7 @@ var femaleNames = [];
 
 let readNames = async (gender) => {
   try {
-    let data = await fs.readFile(`${gender}Names.json`);
+    let data = await fs.readFile(path.resolve(__dirname, `${gender}Names.json`));
     try {
       const dataJson = JSON.parse(data);
       var n = 0;

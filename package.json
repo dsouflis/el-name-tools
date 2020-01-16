@@ -1,6 +1,6 @@
 {
   "name": "el-name-tools",
-  "version": "1.0.2",
+  "version": "1.1.2",
   "description": "Tools for recognizing Greek names, detecting their gender and forming their vocative",
   "main": "index.js",
   "scripts": {
