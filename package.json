@@ -1,22 +1,24 @@
 {
   "name": "el-name-tools",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Tools for recognizing Greek names, detecting their gender and forming their vocative",
   "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "mocha"
   },
   "keywords": [
     "greek"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dsouflis/el-name-tools.git"
+    "url": "git+https://github.com/dsouflis/el-name-tools.git"
   },
   "author": "Dimitrios Souflis",
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.2.2"
+    "mocha": "^10.3.0"
   }
 }

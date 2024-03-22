@@ -1,4 +1,4 @@
-[
+export const femaleNames = [
   {
     "namestext": "Άβα",
     "gender": "FEMALE",
@@ -6235,4 +6235,4 @@
       }
     ]
   }
-]
+];

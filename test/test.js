@@ -1,6 +1,8 @@
-let expect = require('chai').expect;
-const describe = require("mocha").describe;
-let nametools = require('../index');
+// let expect = require('chai').expect;
+// const describe = require("mocha").describe;
+import chai from "chai";
+const {expect} = chai;
+import {nametools} from "../index.js";
 
 describe('el-name-tools', function () {
   describe('#phoneticSkeleton', function () {
@@ -19,17 +21,7 @@ describe('el-name-tools', function () {
     test("Χάιδω", "χαιδο");
   });
 
-  describe('#init', function () {
-    it('should initialize correctly', async function () {
-      let result = await nametools.init();
-      expect(result).to.equal(true);
-    });
-  });
-
-  describe('methods needing initialization', function () {
-    before(async () => {
-      await nametools.init();
-    });
+  describe('basic exported methods', function () {
     describe('#getGender', function () {
       let test = (name, expectedGender) => {
         it(`should recognize "${name}" as ${expectedGender}`,
@@ -138,14 +130,12 @@ describe('el-name-tools', function () {
   });
 
   describe('needing nameday initialization', function () {
-    before(async () => {
-      await nametools.init(2020);
-    });
-    let test = (name, expectedDate) => {
+    const test = (name, expectedDate) => {
       it(`should calculate nameday for "${name}" as ${expectedDate}`,
-          async function () {
-            let nameData = nametools.recognizeName(name);
-            let namedayDateΜillis = nameData.namedayDates[2020].map(
+          function () {
+            const nameData = nametools.recognizeName(name);
+            const namedayDates =  nametools.calculateNamedays(nameData, 2020, 2020)
+            const namedayDateΜillis = namedayDates[2020].map(
                 d => d.getTime());
             expect(namedayDateΜillis).to.include(expectedDate.getTime());
           });

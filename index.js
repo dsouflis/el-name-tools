@@ -1,65 +1,21 @@
-const fs = require('fs').promises;
-let path = require('path');
+import {yearlyData} from './yearlyData.js';
+import {maleNames} from "./maleNames.js";
+import {femaleNames} from "./femaleNames.js";
 
-var yearlyData = [];
+const vowelsWT = ['α', 'ε', 'η', 'ι', 'υ', 'ο', 'ω'];
+const vowelsT = ['ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'ϊ', 'ΐ'];
 
-let readYearlyData = async () => {
-  try {
-    let data = await fs.readFile(path.resolve(__dirname, 'yearlyData.json'));
-    try {
-      const dataJson = JSON.parse(data);
-      console.log(
-          `Read yearly data from ${dataJson[0].yearnum} to ${dataJson[dataJson.length
-          - 1].yearnum}`);
-      return dataJson;
-    } catch (error) {
-      console.log(`Parsing yearly data failed: ${error}`);
-    }
-  } catch (error) {
-    console.log(`Reading yearly data failed: ${error}`);
-  }
-};
+const isVowel = (c) => vowelsT.includes(c) || vowelsWT.includes(c);
 
-var maleNames = [];
-var femaleNames = [];
-
-let readNames = async (gender) => {
-  try {
-    let data = await fs.readFile(path.resolve(__dirname, `${gender}Names.json`));
-    try {
-      const dataJson = JSON.parse(data);
-      var n = 0;
-      dataJson.forEach(x => {
-        let names = x.namestext.split(',');
-        n += names.length;
-        x.names = names;
-        x.skeletons = names.map(n => phoneticSkeleton(n));
-      });
-      console.log(
-          `Read ${dataJson.length} ${gender} names with ${n} total forms`);
-      return dataJson;
-    } catch (error) {
-      console.log(`Parsing ${gender} names failed: ${error}`);
-    }
-  } catch (error) {
-    console.log(`Reading ${gender} names failed: ${error}`);
-  }
-};
-
-let vowelsWT = ['α', 'ε', 'η', 'ι', 'υ', 'ο', 'ω'];
-let vowelsT = ['ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'ϊ', 'ΐ'];
-
-let isVowel = (c) => vowelsT.includes(c) || vowelsWT.includes(c);
-
-let maleIs = ["Άγις", "Άδωνις", "Αναξίπολις", "Βάκις", "Βόρις", "Θέογνις",
+const maleIs = ["Άγις", "Άδωνις", "Αναξίπολις", "Βάκις", "Βόρις", "Θέογνις",
   "Θέσπις", "Πάρις", "Ναθαναήλ"];
-let maleIsNormalized = maleIs.map(s => s.toLocaleLowerCase().split('').map(
+const maleIsNormalized = maleIs.map(s => s.toLocaleLowerCase().split('').map(
     c => c.normalize("NFD").charAt(0)).join(''));
 
-let phoneticSkeleton = (name) => phoneticSkeletonAux(
+const phoneticSkeleton = (name) => phoneticSkeletonAux(
     name.toLocaleLowerCase().split(''), []);
 
-let phoneticSkeletonAux = (s, accum) => {
+const phoneticSkeletonAux = (s, accum) => {
   // console.log(`s=${s}, accum=${[...accum].reverse().join('')}`);
   if (!s || !s.length) {
     return accum.reverse().join('');
@@ -178,7 +134,7 @@ let phoneticSkeletonAux = (s, accum) => {
   }
 };
 
-let phoneticSkeletonAuxDefault = (first, rest, accum) => {
+const phoneticSkeletonAuxDefault = (first, rest, accum) => {
   if (first === rest[0] && !isVowel(first)) {
     return phoneticSkeletonAux([first, ...rest.slice(1)], accum);
   } else {
@@ -192,20 +148,19 @@ let phoneticSkeletonAuxDefault = (first, rest, accum) => {
 
 };
 
-let recognizeName = (name) => {
+const recognizeName = (name) => {
   let skel = phoneticSkeleton(name);
 
   function findName(names) {
-    let maleName = names.find(nd => nd.skeletons.includes(skel));
-    if (maleName) {
-      let i = maleName.skeletons.findIndex(s => s === skel);
+    let foundName = names.find(nd => nd.skeletons.includes(skel));
+    if (foundName) {
+      let i = foundName.skeletons.findIndex(s => s === skel);
       return {
-        name: maleName.names[i],
+        name: foundName.names[i],
         skeleton: skel,
-        allnames: maleName.names,
-        namedays: maleName.namedays,
-        namedayDates: maleName.namedayDates,
-        gender: maleName.gender
+        allnames: foundName.names,
+        namedays: foundName.namedays,
+        gender: foundName.gender
       };
     }
   }
@@ -213,7 +168,7 @@ let recognizeName = (name) => {
   return findName(maleNames) || findName(femaleNames);
 };
 
-let getGender = (name) => {
+const getGender = (name) => {
   name = name.toLocaleLowerCase()
   let suffix2 = (name.length > 2) ? name.substring(name.length - 2) : name;
   let suffix3 = (name.length > 3) ? name.substring(name.length - 3) : name;
@@ -304,7 +259,7 @@ let getGender = (name) => {
   }
 };
 
-let getVocative = (name) => {
+const getVocative = (name) => {
   let suffix2 = (name.length > 2) ? name.substring(name.length - 2) : name;
   let suffix3 = (name.length > 3) ? name.substring(name.length - 3) : name;
   let suffix4 = (name.length > 4) ? name.substring(name.length - 4) : name;
@@ -348,7 +303,7 @@ let getVocative = (name) => {
   }
 };
 
-let isParoxytono = (name) => {
+const isParoxytono = (name) => {
   let aux = (countL, vowels) => {
     if (countL >= name.length) {
       return false;
@@ -366,7 +321,7 @@ let isParoxytono = (name) => {
   return aux(2, 1);
 };
 
-let getEnding = (name) => {
+const getEnding = (name) => {
   let paroxytono = isParoxytono(name);
   if (paroxytono) {
     return "ο";
@@ -375,7 +330,7 @@ let getEnding = (name) => {
   }
 };
 
-let recognizeAndGetGender = (name) => {
+const recognizeAndGetGender = (name) => {
   let nameData = recognizeName(name);
   if (nameData) {
     return nameData.gender;
@@ -383,7 +338,7 @@ let recognizeAndGetGender = (name) => {
     return getGender(name);
   }
 };
-let recognizeAndGetVocative = (name) => {
+const recognizeAndGetVocative = (name) => {
   let nameData = recognizeName(name);
   if (nameData) {
     return getVocative(nameData.name);
@@ -392,7 +347,7 @@ let recognizeAndGetVocative = (name) => {
   }
 };
 
-let recognizeAndGetNormalizedVocative = (name) => {
+const recognizeAndGetNormalizedVocative = (name) => {
   let nameData = recognizeName(name);
   if (nameData) {
     return getVocative(nameData.allnames[0]);
@@ -401,7 +356,7 @@ let recognizeAndGetNormalizedVocative = (name) => {
   }
 };
 
-let calculateNameday = (nameDaySpec, year) => {
+const calculateNameday = (nameDaySpec, year) => {
   switch (nameDaySpec.case) {
     case 'no-nameday':
       return null;
@@ -433,43 +388,19 @@ let calculateNameday = (nameDaySpec, year) => {
   }
 };
 
-let calculateNamedays = (nameData, startYear, endYear) => {
-  nameData.namedayDates = {};
+const calculateNamedays = (nameData, startYear, endYear) => {
+  const namedayDates = {};
   for (var yr = startYear; yr <= endYear; yr++) {
     let dateArray = [];
-    nameData.namedayDates[yr] = dateArray;
+    namedayDates[yr] = dateArray;
     for (var nameDaySpec of nameData.namedays) {
       dateArray.push(calculateNameday(nameDaySpec, yr));
     }
   }
+  return namedayDates;
 };
 
-const it = {
-  init: async (startYear, endYear) => {
-    try {
-      let result = await Promise.all(
-          [readNames('male'), readNames('female'), readYearlyData()]);
-      maleNames.push.apply(maleNames, result[0]);
-      femaleNames.push.apply(femaleNames, result[1]);
-      yearlyData.push.apply(yearlyData, result[2]);
-      if (startYear) {
-        if (!endYear) {
-          endYear = startYear;
-        } else {
-          endYear = Math.max(startYear, endYear);
-        }
-        for (var nameData of maleNames) {
-          calculateNamedays(nameData, startYear, endYear);
-        }
-        for (var nameData of femaleNames) {
-          calculateNamedays(nameData, startYear, endYear);
-        }
-      }
-      return true;
-    } catch (e) {
-      return false;
-    }
-  },
+export const nametools = {
   phoneticSkeleton,
   recognizeName,
   getGender,
@@ -477,8 +408,17 @@ const it = {
   getVocative,
   recognizeAndGetVocative,
   recognizeAndGetNormalizedVocative,
+  calculateNamedays,
   maleNames,
   femaleNames
 };
 
-module.exports = it;
+
+const processNames = x => {
+  let names = x.namestext.split(',');
+  x.names = names;
+  x.skeletons = names.map(n => phoneticSkeleton(n));
+};
+
+maleNames.forEach(processNames);
+femaleNames.forEach(processNames);

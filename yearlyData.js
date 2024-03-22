@@ -1,4 +1,4 @@
-[
+export const yearlyData = [
   {
     "yearnum": 2019,
     "easterdt": "2019-04-28",
@@ -185,4 +185,4 @@
     "sunday1": "2049-12-12",
     "sunday2": "2049-02-14"
   }
-]
+];
